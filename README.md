@@ -1,14 +1,26 @@
-# trader
+# 401 PROJECT/ 1
 
-## project name : trader 
+## Project Name : Trader 
 
-## project member 
+## Poject Members:
 
 - Ahmad Kmal
 - Yazan aljamal
-- yasmeen adaileh
+- yasmeen Adaileh
 - Marah Joudeh
 
-## discraption 
+## Trello Board:
+- [Trello Board](https://trello.com/b/YLFmPzGT/trader)
 
-it app used to post things that you don't want to see how interested to buy or trade it with another item every user can explore the app and see posts from all user and he / she can send direct messages to other user to ask for more information 
+## App Description:
+
+Trader App is an app used for users to post things that they want to see who is interested to buy or trade , every user can explore the app and see posts from all users , also he can chat with other users as well to ask for more information. 
+
+## Wireframe:
+
+## Domain Modeling:
+
+## Software Requirements:
+
+## Database Entity-Relationship-Diagram:
+
