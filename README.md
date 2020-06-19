@@ -34,7 +34,7 @@ Trader App is an app used for users to post things that they want to see who is 
 
 ## Software Requirements:
 
-![Requirements](/assets/requirements.PNG)
+- [Requirements](software-Req.md)
 
 ## Database Entity-Relationship-Diagram:
 
