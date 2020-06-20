@@ -8,9 +8,11 @@ const server = require('./lib/server.js');
  * @module index
  */
 mongoose.connect(process.env.MONGODB_URI, {
+  useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
 
 server.start(process.env.PORT);
+0
