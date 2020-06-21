@@ -1,7 +1,7 @@
 'use strict';
 require('dotenv').config();
 const mongoose = require('mongoose');
-const server = require('./lib/server.js');
+const server = require('./lib/server-chat');
 /**
  * Simple configration 
  * connect to mongodb
@@ -15,4 +15,3 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 
 server.start(process.env.PORT);
-0
