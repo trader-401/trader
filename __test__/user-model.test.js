@@ -26,7 +26,7 @@ describe('Testin Model CRUD operations', () => {
   });
 
   it('can read all users', async () => {
-    let users = await Model.get();
+    let users = await Model.getUser();
     console.log('user',users);
 
     // expect(users.length).toStrictEqual(2);
