@@ -7,7 +7,7 @@ const mockRequest = supertest(server);
 const base64 = require('base-64');
 jest.fn();
 let id;
-let token;
+let AdminToken;
 describe('Admin role', () => {
   let obj = {'username': 'yasmin', 'password': '1234' , 'role':'admin'};
   let header={
@@ -31,8 +31,8 @@ describe('Admin role', () => {
       return mockRequest.post('/signin').set({'authorization':`Basic ${header3}`})
         .send(obj)
         .then(data=>{
-          //  console.log(data.body, 'tesssssssst dataaaaaaa');
-          token=data.body.token;
+          AdminToken=data.body.token;
+          // console.log(AdminToken, 'AdminTokennnnnnnnnnnnnnnnnnnn');
           expect(data.status).toEqual(200);
           expect(typeof data.body.token).toEqual('string');
         }); 
@@ -55,7 +55,7 @@ describe('Admin role', () => {
     };
     it('/user/:username to post a new post', ()=>{
       return  mockRequest.post('/user/yasmin')
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${AdminToken}`})
         .send(post)
         .then(result=>{
           const record = result.body;
@@ -70,7 +70,7 @@ describe('Admin role', () => {
     });
     it('/status to get all posts in the database (pending,acceptedand rejected)', ()=>{
       return  mockRequest.get('/status')
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${AdminToken}`})
         .send(post)
         .then(result=>{
           const record = result.body;
@@ -83,7 +83,7 @@ describe('Admin role', () => {
     });
     it('/status/:id to get post from the database', ()=>{
       return  mockRequest.get(`/status/${id}`)
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${AdminToken}`})
         .send(post)
         .then(result=>{
           const record = result.body;
@@ -94,13 +94,24 @@ describe('Admin role', () => {
     });
     it('/status/:id to get post from the database and update it', ()=>{
       return  mockRequest.put(`/status/${id}`)
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${AdminToken}`})
         .send({status:'accepted'})
         .then(result=>{
           const record = result.body;
           // console.log(record,'reeeeeeeeeeefffff');
           expect(result.status).toEqual(200);
           expect(record.status).toEqual('accepted');
+        });
+    });
+    it('/statusBy/:categories to get post from the database by category', ()=>{
+      return  mockRequest.get(`/statusBy/cars`)
+        .set({'authorization':`Bearer ${AdminToken}`})
+        .send({status:'accepted'})
+        .then(result=>{
+          const record = result.body;
+          // console.log(record,'reeeeeeeeeeefffff');
+          expect(result.status).toEqual(200);
+          expect(record[0].categories).toEqual('cars');
         });
     });
   });
@@ -112,7 +123,7 @@ describe('Admin role', () => {
     };
     it('/user/:username to add a post', ()=>{
       return  mockRequest.post('/user/yasmin')
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${AdminToken}`})
         .send(postUser)
         .then(result=>{
           const record = result.body;
@@ -127,10 +138,10 @@ describe('Admin role', () => {
     });
     it('/user/all accepted posts', ()=>{
       return  mockRequest.get('/all')
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${AdminToken}`})
         .then(result=>{
           const record = result.body;
-          // console.log(record,'reeeeeeeeeee');
+          // console.log(record,'reeeeeeeegggggggggggggeee');
           id = record[0]._id;
           // console.log('this is the id', id);
           expect(result.status).toEqual(200);
@@ -138,12 +149,12 @@ describe('Admin role', () => {
           expect(record.length).toEqual(1);
         });
     });
-    it('/search/:categories to find posts by category', ()=>{
-      return  mockRequest.get('/search/cars')
-        .set({'authorization':`Bearer ${token}`})
+    it('/searchBy/:categories to find posts by category', ()=>{
+      return  mockRequest.get('/searchBy/cars')
+        .set({'authorization':`Bearer ${AdminToken}`})
         .then(result=>{
           const record = result.body;
-          // console.log(record,'reeeeeeeeeee');
+          // console.log('reeeeeefffffffeeeee', record,'reeeeeeeeeee');
           expect(result.status).toEqual(200);
           expect(record[0].status).toEqual('accepted');
           expect(record[0].username).toEqual('yasmin');
@@ -151,7 +162,7 @@ describe('Admin role', () => {
     });
     it('/user/:id to find post and update it', ()=>{
       return  mockRequest.put(`/user/${id}`)
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${AdminToken}`})
         .send({categories:'bike'})
         .then(result=>{
           const record = result.body;
@@ -163,7 +174,7 @@ describe('Admin role', () => {
     });
     it('/search/:id to find post and update it', ()=>{
       return  mockRequest.delete(`/search/${id}`)
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${AdminToken}`})
         .then(result=>{
           const record = result.body;
           // console.log(record,'reeeeeeeeeee');
@@ -174,8 +185,12 @@ describe('Admin role', () => {
   });
 });
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 describe('users role', () => {
+  let userToken;
   let obj2 = {'username': 'hussein', 'password': '1234' , 'role':'user'};
   let header2={
     headers:{
@@ -197,7 +212,7 @@ describe('users role', () => {
         .send(obj2)
         .then(data=>{
           //  console.log(data.body, 'tesssssssst dataaaaaaa');
-          token=data.body.token;
+          userToken=data.body.token;
           expect(data.status).toEqual(200);
           expect(typeof data.body.token).toEqual('string');
         }); 
@@ -221,7 +236,7 @@ describe('users role', () => {
     };
     it('/user/:username to post a new post', ()=>{
       return  mockRequest.post('/user/hussein')
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${userToken}`})
         .send(post)
         .then(result=>{
           const record = result.body;
@@ -236,7 +251,7 @@ describe('users role', () => {
     });
     it('/status to get all posts in the database (pending,acceptedand rejected)', ()=>{
       return  mockRequest.get('/status')
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${userToken}`})
         .send(post)
         .then(result=>{
           const record = result.body;
@@ -247,7 +262,7 @@ describe('users role', () => {
     });
     it('/status/:id to get post from the database', ()=>{
       return  mockRequest.get(`/status/${id}`)
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${userToken}`})
         .send(post)
         .then(result=>{
           const record = result.body;
@@ -258,7 +273,7 @@ describe('users role', () => {
     });
     it('/status/:id to get post from the database and update it', ()=>{
       return  mockRequest.put(`/status/${id}`)
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${userToken}`})
         .send({status:'accepted'})
         .then(result=>{
           const record = result.body;
@@ -269,6 +284,7 @@ describe('users role', () => {
     });
   });
   describe('posts routes functionality with user role', () => {
+    let id;
     let postUser= {
       title:'car',
       description:'red',
@@ -276,57 +292,66 @@ describe('users role', () => {
     };
     it('/user/:username to add a post', ()=>{
       return  mockRequest.post('/user/hussein')
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${userToken}`})
         .send(postUser)
         .then(result=>{
           const record = result.body;
-          console.log(record,'reeefffff');
-          // Object.keys(postUser).forEach((key) => {
-          //   expect(record[key]).toEqual(postUser[key]);
+          id = record._id;
+          Object.keys(postUser).forEach((key) => {
+            expect(record[key]).toEqual(postUser[key]);
             expect(result.status).toEqual(200);
-          //   expect(record.status).toEqual('pending');
-          //   expect(record.username).toEqual('yasmin');
+            expect(record.status).toEqual('pending');
+            expect(record.username).toEqual('hussein');
+          });
         });
     });
     it('/user/all accepted posts', ()=>{
       return  mockRequest.get('/all')
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${userToken}`})
         .then(result=>{
           const record = result.body;
-          // console.log(record,'reeeeeeeeeee');
-          id = record[0]._id;
-          // console.log('this is the id', id);
+          console.log(record,'reeeeeeeeeeefffffffffffffffffffffff');
+          expect(result.status).toEqual(200);
+          expect(Array.isArray(record)).toBe(true);
+          expect(record.length).toEqual(0);
+        });
+    });
+    it('/status/:id to get post from the database and update it', ()=>{
+      return  mockRequest.put(`/status/${id}`)
+        .set({'authorization':`Bearer ${AdminToken}`})
+        .send({status:'accepted'})
+        .then(result=>{
+          const record = result.body;
+          expect(result.status).toEqual(200);
+          expect(record.status).toEqual('accepted');
+        });
+    });
+    it('/searchBy/:categories to find posts by category', ()=>{
+      return  mockRequest.get('/searchBy/cars')
+        .set({'authorization':`Bearer ${userToken}`})
+        .then(result=>{
+          const record = result.body;
+          // console.log(record,'reeeeeeeeeeefffffffffffffffffffffffffff');
           expect(result.status).toEqual(200);
           expect(Array.isArray(record)).toBe(true);
           expect(record.length).toEqual(1);
         });
     });
-    it('/search/:categories to find posts by category', ()=>{
-      return  mockRequest.get('/search/cars')
-        .set({'authorization':`Bearer ${token}`})
-        .then(result=>{
-          const record = result.body;
-          // console.log(record,'reeeeeeeeeee');
-          expect(result.status).toEqual(200);
-          expect(record[0].status).toEqual('accepted');
-          expect(record[0].username).toEqual('yasmin');
-        });
-    });
     it('/user/:id to find post and update it', ()=>{
       return  mockRequest.put(`/user/${id}`)
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${userToken}`})
         .send({categories:'bike'})
         .then(result=>{
           const record = result.body;
           // console.log(record,'reeeeeeeeeee');
           expect(result.status).toEqual(200);
           expect(record.categories).toEqual('bike');
-          expect(record.username).toEqual('yasmin');
+          expect(record.username).toEqual('hussein');
         });
     });
     it('/search/:id to find post and update it', ()=>{
       return  mockRequest.delete(`/search/${id}`)
-        .set({'authorization':`Bearer ${token}`})
+        .set({'authorization':`Bearer ${userToken}`})
         .then(result=>{
           const record = result.body;
           // console.log(record,'reeeeeeeeeee');
