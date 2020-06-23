@@ -3,7 +3,7 @@ const options = {
   client_id: '377110283721-k8s83m402rjarpmgepe4ipe87q7udcfb.apps.googleusercontent.com', 
   scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
   response_type: 'code',
-  redirect_uri: `http://localhost:3000/oauth`
+  redirect_uri: `http://localhost:3000/oauth`,
 };
 
 const queryString = Object.keys(options)
@@ -15,7 +15,7 @@ const queryString = Object.keys(options)
 console.log('Query', queryString);
 // making the full url
 const authUrl = `${URL}?${queryString}`;
-const link = document.getElementById('oauth');
+const link = document.getElementById('oauthh');
 link.setAttribute('href', authUrl);
 
 // let URL = 'https://accounts.google.com/o/oauth2/v2/auth';
