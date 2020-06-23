@@ -24,12 +24,12 @@ describe('Testin Model CRUD operations', () => {
     expect(user.username).toStrictEqual('yaso');
     expect(user.role).toStrictEqual('user');
   });
-  let post= {
-    title:'car',
-    description:'red',
-    categories:'cars',
-  };
-  it('/user/:username to post a new post', async ()=>{
+  // let post= {
+  //   title:'car',
+  //   description:'red',
+  //   categories:'cars',
+  // };
+  it('create post to check if the post and user schema connecting', async ()=>{
     let post = await ModelPost.create({
       username:'yaso',
       title:'car',
@@ -47,13 +47,13 @@ describe('Testin Model CRUD operations', () => {
     expect(users[1].username).toStrictEqual('yaso');
   });
 
-  it('can generateToken for user', async () => {
+  it('can generate Token for user', async () => {
     let user = {
       'username':'yaso',
       'password':'1234',  
     };
     let users = await Model.generateToken(user);
-    console.log('user',users);
+    expect(typeof users).toEqual('string');
 
   });
 
