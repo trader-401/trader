@@ -36,53 +36,99 @@ Trader App is an app for users who want to see who's interested in buying or tra
 
 ## Routes
 
-- `/signup`
+- `/signup` >>> no auth
+
 * POST: send username and password 
 
-- `/signin`
+
+- `/signin` >>> basic
+
 * POST: send username and password with basic authentication.
 
-- `/oauth`
-* GET: sign using other providers .
 
-- `/users`
+- `/oauth` 
+
+* GET: sign in using google .
+
+
+- `/login-with-facebook`
+
+* POST: sign in using facebook .
+
+
+- `/users` >>> basic
+
 * GET: get all users from database.
 
-- `/status`
+
+- `/status` >>> bearer
+
 * GET: get all posts (published, pending, deleted) for admins only.
 
-- `/status/:id`
+
+- `/status/:id` >>> bearer
+
 * GET: get a certain post (published, pending, deleted) for admins only.
 
-- `/status/:id`
+
+- `/status/:id` >>> bearer
+
 * PUT : update any post (accept, reject, delete) for admins only.
 
-- `/all`
+
+- `/all` >>> no auth
+
 * GET: get all posts (accepted only) for users.
 
-- `/search/:id`
-* GET: get the user a certain post of this ID .
 
-- `/search/:id`
+- `/search/:id` >>> bearer
+
 * DELETE: allow the user to delete his own post.
 
-- `/user/:id`
+
+- `/user/:id` >>> bearer
+
 * PUT: allow the user to update his own post.
 
-- `/user/:username`
+
+- `/user/:username` >>> bearer
+
 * POST: allow the user to post a new post.
 
-- `/search/:categories`
-* GET: allow the user to search for posts regarding the categories.
 
-- `/user/:username`
+- `/user/:username` >>> bearer/guest
+
 * GET : allow the signed in user to get all his posts (published, pending), allow the guest user to get all posts of a certain user (published only).
 
-- `/addfav/:id`
-* GET : allow the user to add a certain posts to his favorites.
 
-- `/fav`
-* GET : allow the user to get all his favorite posts.
+- `/searchBy/:categories` >>> no auth
+
+* GET: allow the user to search for accepted posts regarding the categories.
+
+
+- `/statusBy/:categories` >>> bearer
+
+* GET: allow the admin to search for ALL posts regarding the categories.
+
+
+- `/addfav/:id` >>> bearer
+
+* GET : allow the user to add a certain post to his favorites.
+
+
+- `/fav` >>> bearer
+
+* GET : allow the user to get all posts in his favorites list.
+
+
+- `/rate/:id` >>> bearer
+
+* POST : allow the user to rate a certain post.
+
+
+- `/comment/:id` >>> bearer
+
+* POST : allow the user to  leave a comment on a certain post.
 
 
 ## Database Entity-Relationship-Diagram:
