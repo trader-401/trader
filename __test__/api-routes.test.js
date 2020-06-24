@@ -118,32 +118,33 @@ describe('test all routes in the server', () => {
       });
     });
     describe('posts routes', () => {
-      let postUser= {
-        title:'car',
-        description:'red',
-        categories:'cars',
+      let postUser2= {
+        title:'iPhone',
+        description:'black',
+        categories:'mobile',
       };
+
       it('/user/:username to add a post', ()=>{
         return  mockRequest.post('/user/yasmin')
           .set({'authorization':`Bearer ${AdminToken}`})
-          .send(postUser)
+          .send(postUser2)
           .then(result=>{
             const record = result.body;
             // console.log(record,'reeeeeeeeeee');
-            Object.keys(postUser).forEach((key) => {
-              expect(record[key]).toEqual(postUser[key]);
+            Object.keys(postUser2).forEach((key) => {
+              expect(record[key]).toEqual(postUser2[key]);
               expect(result.status).toEqual(200);
               expect(record.status).toEqual('pending');
               expect(record.username).toEqual('yasmin');
             });
           });
       });
-      it('/user/all accepted posts', ()=>{
+      it('/all accepted posts', ()=>{
         return  mockRequest.get('/all')
           .set({'authorization':`Bearer ${AdminToken}`})
           .then(result=>{
             const record = result.body;
-            // console.log(record,'reeeeeeeegggggggggggggeee');
+            console.log(record,'reeeeeeeegggggggggggggevvvvvvvvvvvvvvvvvee');
             id = record[0]._id;
             // console.log('this is the id', id);
             expect(result.status).toEqual(200);
@@ -162,6 +163,17 @@ describe('test all routes in the server', () => {
             expect(record[0].username).toEqual('yasmin');
           });
       });
+      it('/searchBy/:categories to find posts by category and the post is not accepted yet', ()=>{
+        return  mockRequest.get('/searchBy/mobile')
+          .set({'authorization':`Bearer ${AdminToken}`})
+          .then(result=>{
+            const record = result.body;
+            // console.log('reeeeeefffffffeeeee', record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(Array.isArray(record)).toBe(true);
+            expect(record.length).toEqual(0);
+          });
+      });
       it('/user/:id to find post and update it', ()=>{
         return  mockRequest.put(`/user/${id}`)
           .set({'authorization':`Bearer ${AdminToken}`})
@@ -174,7 +186,42 @@ describe('test all routes in the server', () => {
             expect(record.username).toEqual('yasmin');
           });
       });
-      it('/search/:id to find post and update it', ()=>{
+      
+      it('/user/:id to find post and update it', ()=>{
+        return  mockRequest.put(`/user/${id}`)
+          .set({'authorization':`Bearer ${AdminToken}`})
+          .send({title:'spor'})
+          .then(result=>{
+            const record = result.body;
+            // console.log(record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(record.title).toEqual('spor');
+            expect(record.username).toEqual('yasmin');
+          });
+      });
+      it('/rate/:id to find post and update it', ()=>{
+        return  mockRequest.post(`/rate/${id}`)
+          .set({'authorization':`Bearer ${AdminToken}`})
+          .send({theRate:'+'})
+          .then(result=>{
+            const record = result.body;
+            console.log(record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(record.rate).toEqual(1);
+          });
+      });
+      it('/comment/:id to find post and update it', ()=>{
+        return  mockRequest.post(`/comment/${id}`)
+          .set({'authorization':`Bearer ${AdminToken}`})
+          .send({theComment:'the test is passed my friend'})
+          .then(result=>{
+            const record = result.body;
+            console.log(record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(record.comment[0].theComment).toEqual('the test is passed my friend');
+          });
+      });
+      it('/search/:id to find post and delete it', ()=>{
         return  mockRequest.delete(`/search/${id}`)
           .set({'authorization':`Bearer ${AdminToken}`})
           .then(result=>{
@@ -307,12 +354,33 @@ describe('test all routes in the server', () => {
             });
           });
       });
+      let postUser2= {
+        title:'iPhone',
+        description:'black',
+        categories:'mobile',
+      };
+
+      it('/user/:username to add a post', ()=>{
+        return  mockRequest.post('/user/hussein')
+          .set({'authorization':`Bearer ${userToken}`})
+          .send(postUser2)
+          .then(result=>{
+            const record = result.body;
+            // console.log(record,'reeeeeeeeeee');
+            Object.keys(postUser2).forEach((key) => {
+              expect(record[key]).toEqual(postUser2[key]);
+              expect(result.status).toEqual(200);
+              expect(record.status).toEqual('pending');
+              expect(record.username).toEqual('hussein');
+            });
+          });
+      });
       it('/user/all accepted posts', ()=>{
         return  mockRequest.get('/all')
           .set({'authorization':`Bearer ${userToken}`})
           .then(result=>{
             const record = result.body;
-            console.log(record,'reeeeeeeeeeefffffffffffffffffffffff');
+            // console.log(record,'reeeeeeeeeeefffffffffffffffffffffff');
             expect(result.status).toEqual(200);
             expect(Array.isArray(record)).toBe(true);
             expect(record.length).toEqual(0);
@@ -339,6 +407,17 @@ describe('test all routes in the server', () => {
             expect(record.length).toEqual(1);
           });
       });
+      it('/user/all accepted posts after modifing the status to accepte', ()=>{
+        return  mockRequest.get('/all')
+          .set({'authorization':`Bearer ${userToken}`})
+          .then(result=>{
+            const record = result.body;
+            // console.log(record,'reeeeeeeeeeefffffffffffffffffffffff');
+            expect(result.status).toEqual(200);
+            expect(Array.isArray(record)).toBe(true);
+            expect(record.length).toEqual(1);
+          });
+      });
       it('/user/:id to find post and update it', ()=>{
         return  mockRequest.put(`/user/${id}`)
           .set({'authorization':`Bearer ${userToken}`})
@@ -349,6 +428,29 @@ describe('test all routes in the server', () => {
             expect(result.status).toEqual(200);
             expect(record.categories).toEqual('bike');
             expect(record.username).toEqual('hussein');
+          });
+      });
+    
+      it('/rate/:id to find post and update it', ()=>{
+        return  mockRequest.post(`/rate/${id}`)
+          .set({'authorization':`Bearer ${userToken}`})
+          .send({theRate:'+'})
+          .then(result=>{
+            const record = result.body;
+            console.log(record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(record.rate).toEqual(1);
+          });
+      });
+      it('/comment/:id to find post and update it', ()=>{
+        return  mockRequest.post(`/comment/${id}`)
+          .set({'authorization':`Bearer ${userToken}`})
+          .send({theComment:'the test is passed my friend'})
+          .then(result=>{
+            const record = result.body;
+            console.log(record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(record.comment[0].theComment).toEqual('the test is passed my friend');
           });
       });
       it('/search/:id to find post and update it', ()=>{
@@ -385,7 +487,7 @@ describe('test all routes in the server', () => {
           const record = result.body;
           console.log(record,'reeeeeeeeeee');
           expect(result.status).toEqual(200);
-          expect(record).toEqual('Post Add to Fav');
+          expect(record).toEqual('Post Added to your Fav');
         });
     });
     it('/fav to see other user\'s posts', ()=>{
