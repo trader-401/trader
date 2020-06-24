@@ -6,11 +6,76 @@
     <title>OAuth page</title>
   </head>
   <body>
+
     <main>
-      <a href="" id="oauth">Login</a>
-       <a href="" id="oauthh">Login</a>
+      <p>
+        <a href="" id="oauth1">Login with google</a>
+      </p>
+      <p>
+        <a  href="#" id="loginbtn" onclick="javascript:loginWithFacebook()">Login with facebook</a>
+      </p>
     </main>
-    <script src="script.js"></script>
-    <script src="scriptgoogle.js"></script>
+
+
+    <script class='facebook-oauth'>
+      window.fbAsyncInit = function () {
+        FB.init({
+          appId: '1715201048633316',
+          cookie: true,
+          xfbml: true,
+          version: 'v7.0'
+        });
+        FB.AppEvents.logPageView();
+      };
+      (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+      document.getElementById('loginbtn').addEventListener('click', loginWithFacebook, false );
+      function loginWithFacebook(){
+        FB.login(response => {
+          const {authResponse:{accessToken, userID}} = response;
+          fetch('/login-with-facebook', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({accessToken, userID}),
+          }).then(res => {
+            console.log(res);
+          });
+          FB.api('/me', function(response) {
+            console.log(JSON.stringify(response));
+          });
+        }, {scope: 'public_profile,email'});
+        return false;
+      }
+    </script>
+
+
+    <script class='google-oauth'>
+      const URL = 'https://accounts.google.com/o/oauth2/v2/auth';
+      const options = {
+        client_id: '377110283721-k8s83m402rjarpmgepe4ipe87q7udcfb.apps.googleusercontent.com', 
+        scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+        response_type: 'code',
+        redirect_uri: `https://trader401.herokuapp.com/oauth`
+      };
+      const queryString = Object.keys(options)
+        .map((key) => {
+          return `${key}=${encodeURIComponent(options[key])}`;
+        })
+        .join('&');
+      console.log('Query', queryString);
+      // making the full url
+      const authUrl = `${URL}?${queryString}`;
+      const link = document.getElementById('oauth1');
+      link.setAttribute('href', authUrl);
+    </script>
+
+
   </body>
 </html>
