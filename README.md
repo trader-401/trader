@@ -641,5 +641,5 @@ Trader App is an app for users who want to see who's interested in buying or tra
 - `npm test`
 - `npm run lint`
 
-![tests](/assets/test-run.PNG)
+![tests](/assets/run-test.PNG)
 
