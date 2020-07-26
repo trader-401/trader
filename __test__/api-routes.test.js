@@ -210,6 +210,39 @@ describe('test all routes in the server', () => {
             expect(record.rate).toEqual(1);
           });
       });
+      it('/rate/:id to find post and update it', ()=>{
+        return  mockRequest.post(`/rate/${id}`)
+          .set({'authorization':`Bearer ${AdminToken}`})
+          .send({theRate:'+'})
+          .then(result=>{
+            const record = result.body;
+            console.log(record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(record.rate).toEqual(1);
+          });
+      });
+      it('/rate/:id to find post and update it', ()=>{
+        return  mockRequest.post(`/rate/${id}`)
+          .set({'authorization':`Bearer ${AdminToken}`})
+          .send({theRate:'-'})
+          .then(result=>{
+            const record = result.body;
+            console.log(record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(record.rate).toEqual(0);
+          });
+      });
+      it('/rate/:id to find post and update it', ()=>{
+        return  mockRequest.post(`/rate/${id}`)
+          .set({'authorization':`Bearer ${AdminToken}`})
+          .send({theRate:'-'})
+          .then(result=>{
+            const record = result.body;
+            console.log(record,'reeeeeeeeeee');
+            expect(result.status).toEqual(200);
+            expect(record.rate).toEqual(-1);
+          });
+      });
       it('/comment/:id to find post and update it', ()=>{
         return  mockRequest.post(`/comment/${id}`)
           .set({'authorization':`Bearer ${AdminToken}`})
