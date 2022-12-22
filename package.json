@@ -39,7 +39,7 @@
     "http": "0.0.1-security",
     "js-base64": "^2.5.2",
     "jsdoc": "^3.6.4",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.27.0",
     "mongoose": "^5.9.16",
     "morgan": "^1.10.0",
